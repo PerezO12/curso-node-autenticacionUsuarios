@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 
 //Mis importaciones
 const { validarCampos } = require('../middlewares/validar_campos');
-const { login } = require('../controllers/auth');
+const { login, googleIdentity } = require('../controllers/auth');
 
 
 //Creacion del Router
@@ -18,6 +18,12 @@ router.post('/login',[
     check('password', 'La contraseña es obligatoria').not().isEmpty(),
     validarCampos
 ], login);
+
+//POST
+router.post('/google',[
+    check('idToken', 'El idToken es necesario').not().isEmpty(),
+    validarCampos
+], googleIdentity);
 
 
 
