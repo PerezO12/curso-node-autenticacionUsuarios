@@ -82,9 +82,7 @@ const mostrarImagen = async( req, res = response ) => {
   let modelo;
 
   switch(coleccion) {
-
     case 'usuarios':
-
       modelo = await Usuario.findById(id);
       if ( !modelo ) {
         return res.status(400).json({
@@ -92,7 +90,7 @@ const mostrarImagen = async( req, res = response ) => {
         });
       }
 
-      break;
+    break;
       
     case 'productos':
 
@@ -103,21 +101,22 @@ const mostrarImagen = async( req, res = response ) => {
         });
       }
 
-      break;
+    break;
 
     default:
       return res.status(500).json({msg: 'Se me olvido implementar esto'})
   }
 
-  //borrado de imagen anterior
 
-  if ( modelo.img ) {
-    const pathImagen = path.join(__dirname, '../uploads', coleccion, modelo.img)
-    if ( fs.existsSync( pathImagen ) ) {
-      return res.sendFile( pathImagen );
-    }
+    if ( modelo.img ) {
+      // Retorna la imagen
+      const pathImagen = path.join( __dirname, '../uploads', coleccion, modelo.img );
+      if ( fs.existsSync( pathImagen ) ) {
+          return res.sendFile( pathImagen )
+      }
   }
-  const pathImagen = path.join(__dirname, '../assets/no-image.jpg')
+
+  const pathImagen = path.join( __dirname, '../assets/no-image.jpg');
   res.sendFile( pathImagen );
 }
 
@@ -176,10 +175,54 @@ const actualizarImagenClaudinary = async (req = request, res = response) => {
   res.json(modelo);
 }
 
+const mostrarImagenClaudinary = async( req, res = response ) => {
+  const { id, coleccion } = req.params;
+
+  let modelo;
+
+  switch(coleccion) {
+    case 'usuarios':
+      modelo = await Usuario.findById(id);
+      if ( !modelo ) {
+        return res.status(400).json({
+          msg: `No existe un usuario con el id ${id}`
+        });
+      }
+
+    break;
+      
+    case 'productos':
+
+      modelo = await Producto.findById(id);
+      if ( !modelo ) {
+        return res.status(400).json({
+          msg: `No existe un producto con el id ${id}`
+        });
+      }
+
+    break;
+
+    default:
+      return res.status(500).json({msg: 'Se me olvido implementar esto'})
+  }
+
+  console.log(modelo)
+
+  // Retorna la imagen
+    if ( modelo.img ) { 
+      return res.json({
+        img: modelo.img
+      });     
+  }
+  const pathImagen = path.join( __dirname, '../assets/no-image.jpg');
+  res.sendFile( pathImagen );
+}
 
 module.exports = {
     cargarArchivo,
     actualizarImagen,
     mostrarImagen,
-    actualizarImagenClaudinary
+    actualizarImagenClaudinary,
+    mostrarImagenClaudinary,
+
 }

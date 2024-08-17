@@ -4,7 +4,7 @@ const { check } = require('express-validator');
 
 //Mis importaciones
 const { validarCampos, validarArchivoSubir } = require('../middlewares');
-const { cargarArchivo, actualizarImagen, mostrarImagen, actualizarImagenClaudinary } = require('../controllers/uploads');
+const { cargarArchivo, actualizarImagen, mostrarImagen, actualizarImagenClaudinary, mostrarImagenClaudinary } = require('../controllers/uploads');
 const { coleccionesPermitidas } = require('../helpers');
 
 
@@ -24,10 +24,10 @@ router.put('/:coleccion/:id',[
 //], actualizarImagen )
 
 //GET
-router.get('/:coleccion/:id',[
-    check('id', 'El id debe de ser de mongo').isMongoId(),
-    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios', 'productos'] ) ),
+router.get('/:coleccion/:id', [
+    check('id','El id debe de ser de mongo').isMongoId(),
+    check('coleccion').custom( c => coleccionesPermitidas( c, ['usuarios','productos'] ) ),
     validarCampos
-], mostrarImagen)
+], mostrarImagenClaudinary  )
 
 module.exports = router
