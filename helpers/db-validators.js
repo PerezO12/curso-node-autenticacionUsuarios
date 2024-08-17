@@ -2,7 +2,9 @@ const { Categoria, Producto } = require('../models');
 const Role = require('../models/role');
 const Usuario = require('../models/usuario');
 
-
+/* 
+ROLE
+ */
 const esRoleValido = async(rol = '') => {
 
     const existeRol = await Role.findOne({ rol });
@@ -12,6 +14,9 @@ const esRoleValido = async(rol = '') => {
     }
 }
 
+/* 
+EMAIL
+ */
 const emailExiste = async( correo = '' ) => {
 
     //verificar si el correo existe
@@ -23,6 +28,9 @@ const emailExiste = async( correo = '' ) => {
     }
 }
 
+/*
+ USUARIOS 
+ */
 const existeUsuarioPorId = async( id ) => {
     //verificar si el id existe
 
@@ -33,14 +41,9 @@ const existeUsuarioPorId = async( id ) => {
     } 
 }
 
-const existeCategoriaPorId = async( id ) => {
-
-    const existeID = await Categoria.findById( id );
-
-    if ( !existeID ) {
-        throw new Error(`El id ${id} no existe`);
-    } 
-}
+/* 
+PRODUCTOS
+*/
 const existeProductoPorId = async( id ) => {
 
     const existeID = await Producto.findById( id );
@@ -49,6 +52,10 @@ const existeProductoPorId = async( id ) => {
         throw new Error(`El id ${id} no existe`);
     } 
 }
+
+/* 
+CATEGORIAS 
+*/
 const existeCategoriaNombre = async( nombre ) => {
     nombre = nombre.toUpperCase()
     const categoriaDB = await Categoria.findOne( {nombre} )
@@ -57,6 +64,29 @@ const existeCategoriaNombre = async( nombre ) => {
         throw new Error(`La categoria ${nombre} no existe`)
     }
 }
+const existeCategoriaPorId = async( id ) => {
+
+    const existeID = await Categoria.findById( id );
+
+    if ( !existeID ) {
+        throw new Error(`El id ${id} no existe`);
+    } 
+}
+
+/* 
+Validar colecciones permitidas
+*/
+
+const coleccionesPermitidas = (coleccion = '', colecciones = []) => {
+
+    const incluida = colecciones.includes( coleccion );
+
+    if ( !incluida ) {
+        throw new Error(`La coleccion ${coleccion} no es permitida - ${colecciones}`);
+    }
+    
+    return true;
+}
 
 module.exports = {
     esRoleValido,
@@ -64,5 +94,7 @@ module.exports = {
     existeUsuarioPorId,
     existeCategoriaPorId,
     existeCategoriaNombre,
-    existeProductoPorId
+    existeProductoPorId,
+    coleccionesPermitidas,
+    
 }
